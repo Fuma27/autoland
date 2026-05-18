@@ -8,7 +8,7 @@ import '../styles/components.css';
 export default function Sales() {
   const [sales, setSales] = useState([]);
   const [vehicles, setVehicles] = useState([]);
-  const [customers, setCustomers] = useState([]);
+  const [, setCustomers] = useState([]);
   const [summary, setSummary] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [showCustomerForm, setShowCustomerForm] = useState(false);

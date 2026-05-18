@@ -4,7 +4,7 @@ export default function VehicleSearch({ onSelectVehicle, onEditVehicle, onViewDe
   const [searchTerm, setSearchTerm] = useState("");
   const [vehicles, setVehicles] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
   const fetchVehicles = async () => {
