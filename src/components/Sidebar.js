@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import '../styles/sidebar.css';
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
   
   const menuItems = [
@@ -15,12 +15,15 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
-        <h1 className="sidebar-logo">
-          <span>AUTO</span>
-          <span>LAND</span>
-        </h1>
+        <div className="sidebar-logo-container">
+          <h1 className="sidebar-logo">
+            <span>AUTO</span>
+            <span>LAND</span>
+          </h1>
+          <button className="sidebar-close-btn" onClick={onClose}>×</button>
+        </div>
         <p className="sidebar-subtitle">Car Dealership Management</p>
       </div>
 
