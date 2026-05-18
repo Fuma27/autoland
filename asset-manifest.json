@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/autoland/static/css/main.2a454a27.css",
+    "main.js": "/autoland/static/js/main.4bbca710.js",
+    "index.html": "/autoland/index.html",
+    "main.2a454a27.css.map": "/autoland/static/css/main.2a454a27.css.map",
+    "main.4bbca710.js.map": "/autoland/static/js/main.4bbca710.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2a454a27.css",
+    "static/js/main.4bbca710.js"
+  ]
+}
