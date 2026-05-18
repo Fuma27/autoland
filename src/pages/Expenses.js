@@ -23,7 +23,7 @@ export default function Expenses() {
   const fetchExpenses = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/expenses");
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/expenses`);
       const data = await response.json();
       setExpenses(Array.isArray(data) ? data : []);
       
@@ -57,7 +57,7 @@ export default function Expenses() {
     setLoading(true);
     
     try {
-      const response = await fetch("http://localhost:5000/api/expenses", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/expenses`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newExpense)
@@ -87,7 +87,7 @@ export default function Expenses() {
     if (!window.confirm("Are you sure you want to delete this expense?")) return;
     
     try {
-      const response = await fetch(`http://localhost:5000/api/expenses/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/expenses/${id}`, {
         method: "DELETE"
       });
       

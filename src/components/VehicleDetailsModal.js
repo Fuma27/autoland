@@ -29,7 +29,7 @@ export default function VehicleDetailsModal({ vehicleId, onClose, onUpdate }) {
   const fetchVehicleDetails = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/api/vehicle-details/${vehicleId}/complete`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/vehicle-details/${vehicleId}/complete`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -49,7 +49,7 @@ export default function VehicleDetailsModal({ vehicleId, onClose, onUpdate }) {
   const handleAddMaintenance = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/vehicle-details/maintenance", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/vehicle-details/maintenance`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...newMaintenance, vehicle_id: vehicleId })
@@ -89,7 +89,7 @@ export default function VehicleDetailsModal({ vehicleId, onClose, onUpdate }) {
   const handleAddRepair = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/vehicle-details/repairs", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/vehicle-details/repairs`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...newRepair, vehicle_id: vehicleId })

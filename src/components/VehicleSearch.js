@@ -10,7 +10,7 @@ export default function VehicleSearch({ onSelectVehicle, onEditVehicle, onViewDe
   const fetchVehicles = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/vehicles");
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/vehicles`);
       const data = await response.json();
       setVehicles(Array.isArray(data) ? data : []);
     } catch (err) {

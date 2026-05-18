@@ -35,8 +35,8 @@ export default function FinancialDashboard() {
       console.log("Fetching data from API...");
       
       const [salesRes, expensesRes] = await Promise.all([
-        fetch("http://localhost:5000/api/sales"),
-        fetch("http://localhost:5000/api/expenses")
+        fetch(`${process.env.REACT_APP_API_URL}/api/sales`),
+        fetch(`${process.env.REACT_APP_API_URL}/api/expenses`)
       ]);
       
       const salesData = await salesRes.json();

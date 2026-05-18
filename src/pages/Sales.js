@@ -52,7 +52,7 @@ export default function Sales() {
   const fetchSales = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/sales");
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/sales`);
       const data = await response.json();
       setSales(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -65,7 +65,7 @@ export default function Sales() {
 
   const fetchAvailableVehicles = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/vehicles/available");
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/vehicles/available`);
       const data = await response.json();
       setVehicles(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -75,7 +75,7 @@ export default function Sales() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/customers");
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/customers`);
       const data = await response.json();
       setCustomers(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -85,7 +85,7 @@ export default function Sales() {
 
   const fetchSummary = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/sales/summary/analytics");
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/sales/summary/analytics`);
       const data = await response.json();
       setSummary(data);
     } catch (err) {
@@ -101,7 +101,7 @@ export default function Sales() {
     }
     
     try {
-      const response = await fetch(`http://localhost:5000/api/customers/search/${query}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/customers/search/${query}`);
       const data = await response.json();
       setCustomerSearchResults(data);
       setShowCustomerResults(true);
@@ -155,7 +155,7 @@ export default function Sales() {
     setLoading(true);
     
     try {
-      const response = await fetch("http://localhost:5000/api/sales", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/sales`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newSale)
@@ -190,7 +190,7 @@ export default function Sales() {
     }
     
     try {
-      const response = await fetch(`http://localhost:5000/api/sales/${selectedSale.id}/payment`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/sales/${selectedSale.id}/payment`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount_paid: parseFloat(paymentAmount) })
@@ -759,7 +759,7 @@ export default function Sales() {
                   onSave={(customerId) => {
                     setShowCustomerForm(false);
                     fetchCustomers();
-                    fetch(`http://localhost:5000/api/customers/${customerId}`)
+                    fetch(`${process.env.REACT_APP_API_URL}/api/customers/${customerId}`)
                       .then(res => res.json())
                       .then(customer => selectCustomer(customer));
                   }}

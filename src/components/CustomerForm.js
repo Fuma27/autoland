@@ -24,7 +24,7 @@ export default function CustomerForm({ customerId, onSave, onClose }) {
 
   const fetchCustomer = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/customers/${customerId}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/customers/${customerId}`);
       const data = await response.json();
       if (data) setCustomer(data);
     } catch (err) {
@@ -39,8 +39,8 @@ export default function CustomerForm({ customerId, onSave, onClose }) {
     
     try {
       const url = customerId 
-        ? `http://localhost:5000/api/customers/${customerId}`
-        : "http://localhost:5000/api/customers";
+        ? `${process.env.REACT_APP_API_URL}/api/customers/${customerId}`
+        : `${process.env.REACT_APP_API_URL}/api/customers`;
       const method = customerId ? "PUT" : "POST";
       
       const response = await fetch(url, {

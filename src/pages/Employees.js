@@ -46,7 +46,7 @@ export default function Employees() {
   const fetchEmployees = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/employees");
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/employees`);
       const data = await response.json();
       setEmployees(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -59,7 +59,7 @@ export default function Employees() {
 
   const fetchSummary = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/employees/summary/salary");
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/employees/summary/salary`);
       const data = await response.json();
       setSummary(data);
     } catch (err) {
@@ -74,8 +74,8 @@ export default function Employees() {
     setLoading(true);
     
     const url = editingEmployee 
-      ? `http://localhost:5000/api/employees/${editingEmployee.id}`
-      : "http://localhost:5000/api/employees";
+      ? `${process.env.REACT_APP_API_URL}/api/employees/${editingEmployee.id}`
+      : `${process.env.REACT_APP_API_URL}/api/employees`;
     
     const method = editingEmployee ? "PUT" : "POST";
     
@@ -137,7 +137,7 @@ export default function Employees() {
     if (!window.confirm("Are you sure you want to delete this employee?")) return;
     
     try {
-      const response = await fetch(`http://localhost:5000/api/employees/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/employees/${id}`, {
         method: "DELETE"
       });
       

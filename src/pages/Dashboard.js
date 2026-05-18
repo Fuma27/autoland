@@ -16,8 +16,8 @@ function Dashboard() {
     setLoading(true);
     try {
       const [salesRes, expensesRes] = await Promise.all([
-        fetch("http://localhost:5000/api/sales"),
-        fetch("http://localhost:5000/api/expenses")
+        fetch(`${process.env.REACT_APP_API_URL}/api/sales`),
+        fetch(`${process.env.REACT_APP_API_URL}/api/expenses`)
       ]);
       setSales(await salesRes.json());
       setExpenses(await expensesRes.json());

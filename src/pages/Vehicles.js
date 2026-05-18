@@ -47,7 +47,7 @@ export default function Vehicles() {
   const fetchVehicles = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/vehicles");
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/vehicles`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -64,7 +64,7 @@ export default function Vehicles() {
 
   const fetchSummary = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/vehicles/summary/profit");
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/vehicles/summary/profit`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -94,8 +94,8 @@ export default function Vehicles() {
     setLoading(true);
     
     const url = editingVehicle 
-      ? `http://localhost:5000/api/vehicles/${editingVehicle.id}`
-      : "http://localhost:5000/api/vehicles";
+      ? `${process.env.REACT_APP_API_URL}/api/vehicles/${editingVehicle.id}`
+      : `${process.env.REACT_APP_API_URL}/api/vehicles`;
     
     const method = editingVehicle ? "PUT" : "POST";
     
@@ -161,7 +161,7 @@ export default function Vehicles() {
     if (!window.confirm("Are you sure you want to delete this vehicle?")) return;
     
     try {
-      const response = await fetch(`http://localhost:5000/api/vehicles/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/vehicles/${id}`, {
         method: "DELETE"
       });
       

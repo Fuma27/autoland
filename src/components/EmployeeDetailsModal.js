@@ -23,7 +23,7 @@ export default function EmployeeDetailsModal({ employeeId, onClose, onUpdate }) 
 
   const fetchEmployeeDetails = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/employees/${employeeId}/complete`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/employees/${employeeId}/complete`);
       const data = await response.json();
       setEmployeeData(data);
     } catch (err) {
@@ -40,7 +40,7 @@ export default function EmployeeDetailsModal({ employeeId, onClose, onUpdate }) 
   const handleAddSalary = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:5000/api/employees/${employeeId}/salary`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/employees/${employeeId}/salary`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newSalary)
