@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import Sales from "./pages/Sales";
@@ -8,13 +8,32 @@ import Expenses from "./pages/Expenses";
 import Employees from "./pages/Employees";
 import FinancialDashboard from "./pages/FinancialDashboard";
 import Reports from "./pages/Reports";
+import Landing from "./pages/Landing";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext";
 
-function App() {
+function AppContent() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const location = useLocation();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  const publicPaths = ["/", "/login", "/register"];
+  const isPublicPath = publicPaths.includes(location.pathname);
+
+  if (isPublicPath) {
+    return (
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    );
+  }
 
   return (
     <div className="app-layout">
@@ -38,16 +57,24 @@ function App() {
 
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/sales" element={<Sales />} />
-          <Route path="/vehicles" element={<Vehicles />} />
-          <Route path="/expenses" element={<Expenses />} />
-          <Route path="/employees" element={<Employees />} />
-          <Route path="/financial" element={<FinancialDashboard />} />
-          <Route path="/reports" element={<Reports />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/sales" element={<ProtectedRoute><Sales /></ProtectedRoute>} />
+          <Route path="/vehicles" element={<ProtectedRoute><Vehicles /></ProtectedRoute>} />
+          <Route path="/expenses" element={<ProtectedRoute><Expenses /></ProtectedRoute>} />
+          <Route path="/employees" element={<ProtectedRoute><Employees /></ProtectedRoute>} />
+          <Route path="/financial" element={<ProtectedRoute><FinancialDashboard /></ProtectedRoute>} />
+          <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
         </Routes>
       </main>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
