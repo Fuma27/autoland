@@ -11,6 +11,7 @@ const Landing = () => {
       {/* Header */}
       <header className="landing-header">
         <div className="landing-logo">
+          <img src="/autoland-logo.jpg" alt="Autoland Logo" className="logo-img" style={{ height: '40px', objectFit: 'contain' }} />
           <span className="brand-auto">AUTO</span>
           <span className="brand-land">LAND</span>
         </div>

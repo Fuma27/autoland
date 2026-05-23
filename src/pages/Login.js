@@ -43,9 +43,12 @@ const Login = () => {
 
       <div className="auth-card">
         <div className="auth-header">
-          <div className="auth-logo">
-            <span className="brand-auto">AUTO</span>
-            <span className="brand-land">LAND</span>
+          <div className="auth-logo" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <img src="/autoland-logo.jpg" alt="Autoland Logo" style={{ height: '48px', objectFit: 'contain' }} />
+            <div>
+              <span className="brand-auto">AUTO</span>
+              <span className="brand-land">LAND</span>
+            </div>
           </div>
           <p>Sign in to your dealership dashboard</p>
         </div>

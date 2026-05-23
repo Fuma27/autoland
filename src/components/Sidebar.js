@@ -27,10 +27,13 @@ export default function Sidebar({ isOpen, onClose }) {
     <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
         <div className="sidebar-logo-container">
-          <h1 className="sidebar-logo">
-            <span>AUTO</span>
-            <span>LAND</span>
-          </h1>
+          <div className="sidebar-logo" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <img src="/autoland-logo.jpg" alt="Autoland Logo" style={{ height: '32px', objectFit: 'contain' }} />
+            <h1 style={{ margin: 0, fontSize: '1.25rem' }}>
+              <span>AUTO</span>
+              <span>LAND</span>
+            </h1>
+          </div>
           <button className="sidebar-close-btn" onClick={onClose}>×</button>
         </div>
         <p className="sidebar-subtitle">Car Dealership Management</p>
