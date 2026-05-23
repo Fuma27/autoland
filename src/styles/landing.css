@@ -38,14 +38,14 @@
   font-size: 1.5rem;
   font-weight: 900;
   letter-spacing: 0.05em;
-  color: #3b82f6;
+  color: #ffffff;
 }
 
 .landing-logo .brand-land {
   font-size: 1.5rem;
   font-weight: 900;
   letter-spacing: 0.05em;
-  color: #ffffff;
+  color: #dc2626;
 }
 
 .landing-nav {
@@ -67,32 +67,32 @@
 }
 
 .btn-primary {
-  background-color: #2563eb;
+  background-color: #dc2626;
   color: #ffffff;
   padding: 0.625rem 1.25rem;
-  border-radius: 0.5rem;
+  border-radius: 0;
   font-weight: 600;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39);
+  box-shadow: 0 4px 14px 0 rgba(220, 38, 38, 0.39);
   border: none;
   cursor: pointer;
   font-size: 0.875rem;
 }
 
 .btn-primary:hover {
-  background-color: #1d4ed8;
+  background-color: #b91c1c;
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.23);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.23);
 }
 
 .btn-primary-large {
   padding: 1rem 2rem;
   font-size: 1rem;
-  border-radius: 0.75rem;
+  border-radius: 0;
 }
 
 .btn-outline {
@@ -100,7 +100,7 @@
   border: 1px solid rgba(51, 65, 85, 0.5);
   color: #ffffff;
   padding: 1rem 2rem;
-  border-radius: 0.75rem;
+  border-radius: 0;
   font-weight: 700;
   text-decoration: none;
   display: inline-flex;
@@ -153,10 +153,10 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  background-color: rgba(59, 130, 246, 0.1);
-  color: #60a5fa;
+  border-radius: 0;
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  background-color: rgba(220, 38, 38, 0.1);
+  color: #fca5a5;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -188,7 +188,7 @@
   color: transparent;
   background-clip: text;
   -webkit-background-clip: text;
-  background-image: linear-gradient(to right, #60a5fa, #6366f1);
+  background-image: linear-gradient(to right, #fca5a5, #dc2626);
 }
 
 .hero-subtitle {
@@ -279,31 +279,31 @@
 .feature-card {
   background-color: rgba(15, 23, 42, 0.6);
   padding: 1.5rem;
-  border-radius: 1rem;
+  border-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
 }
 
 .feature-card:hover {
   background-color: rgba(15, 23, 42, 0.8);
-  border-color: rgba(59, 130, 246, 0.3);
+  border-color: rgba(220, 38, 38, 0.3);
   transform: translateY(-2px);
 }
 
 .feature-icon-wrapper {
   height: 3rem;
   width: 3rem;
-  border-radius: 0.75rem;
+  border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
 }
 
-.icon-blue { background-color: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); }
-.icon-indigo { background-color: rgba(99, 102, 241, 0.1); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.2); }
-.icon-emerald { background-color: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); }
-.icon-purple { background-color: rgba(168, 85, 247, 0.1); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.2); }
+.icon-blue { background-color: rgba(220, 38, 38, 0.1); color: #fca5a5; border: 1px solid rgba(220, 38, 38, 0.2); }
+.icon-indigo { background-color: rgba(185, 28, 28, 0.1); color: #f87171; border: 1px solid rgba(185, 28, 28, 0.2); }
+.icon-emerald { background-color: rgba(153, 27, 27, 0.1); color: #ef4444; border: 1px solid rgba(153, 27, 27, 0.2); }
+.icon-purple { background-color: rgba(127, 29, 29, 0.1); color: #dc2626; border: 1px solid rgba(127, 29, 29, 0.2); }
 
 .feature-card h3 {
   font-weight: 700;

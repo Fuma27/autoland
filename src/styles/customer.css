@@ -42,7 +42,7 @@
 .customer-input {
   padding: 0.625rem 0.75rem;
   border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
+  border-radius: 0;
   font-size: 0.875rem;
   transition: all 0.2s ease;
   background: white;
@@ -51,8 +51,8 @@
 
 .customer-input:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
 .customer-input:hover:not(:disabled) {

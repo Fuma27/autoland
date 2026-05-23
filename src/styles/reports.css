@@ -79,7 +79,7 @@
 .filter-select:focus,
 .filter-input:focus {
   outline: none;
-  border-color: #0e48f1;
+  border-color: #dc2626;
 }
 
 /* Stats Grid */
@@ -121,7 +121,7 @@
 }
 
 .text-primary {
-  color: #0e48f1;
+  color: #dc2626;
 }
 
 .text-muted {
@@ -170,7 +170,7 @@
 }
 
 .chart-bar-fill {
-  background: #0e48f1;
+  background: #dc2626;
   height: 100%;
   width: 0;
 }

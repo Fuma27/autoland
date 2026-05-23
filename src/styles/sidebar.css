@@ -5,7 +5,7 @@
 :root {
   --sidebar-bg: #1a1e2b;
   --sidebar-hover: #252a3a;
-  --sidebar-active: #0e48f1;
+  --sidebar-active: #dc2626;
   --sidebar-text: #a0a4b8;
   --sidebar-text-light: #ffffff;
   --sidebar-border: #2a2f3f;
@@ -196,7 +196,7 @@
   margin-top: 1rem;
   padding: 0.75rem;
   background: rgba(255, 255, 255, 0.04);
-  border-radius: 8px;
+  border-radius: 0;
   border: 1px solid var(--sidebar-border);
   display: flex;
   align-items: center;
@@ -206,7 +206,7 @@
 .sidebar-user-avatar {
   height: 2rem;
   width: 2rem;
-  border-radius: 50%;
+  border-radius: 0;
   background: var(--sidebar-active);
   display: flex;
   align-items: center;
@@ -251,7 +251,7 @@
   font-weight: 500;
   font-size: 0.85rem;
   padding: 0.6rem 0.75rem;
-  border-radius: 6px;
+  border-radius: 0;
   cursor: pointer;
   transition: all 0.2s;
   width: 100%;

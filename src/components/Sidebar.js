@@ -28,7 +28,7 @@ export default function Sidebar({ isOpen, onClose }) {
       <div className="sidebar-header">
         <div className="sidebar-logo-container">
           <div className="sidebar-logo" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <img src="/autoland-logo.jpg" alt="Autoland Logo" style={{ height: '32px', objectFit: 'contain' }} />
+            <img src="/autoland-logo.png" alt="Autoland Logo" style={{ height: '32px', objectFit: 'contain' }} />
             <h1 style={{ margin: 0, fontSize: '1.25rem' }}>
               <span>AUTO</span>
               <span>LAND</span>

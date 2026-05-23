@@ -19,7 +19,7 @@
 
 .modal-content {
   background: white;
-  border-radius: 0.75rem;
+  border-radius: 0;
   width: 90%;
   max-width: 500px;
   max-height: 90vh;
@@ -91,12 +91,12 @@
 }
 
 .modal-tab:hover {
-  color: #2563eb;
+  color: #dc2626;
 }
 
 .modal-tab.active {
-  color: #2563eb;
-  border-bottom-color: #2563eb;
+  color: #dc2626;
+  border-bottom-color: #dc2626;
 }
 
 /* Details Grid */
@@ -110,7 +110,7 @@
 .info-card {
   background: #f9fafb;
   padding: 1rem;
-  border-radius: 0.5rem;
+  border-radius: 0;
   border: 1px solid #e5e7eb;
 }
 
