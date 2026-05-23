@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import VehicleDetailsModal from "../components/VehicleDetailsModal";
+import { FiTruck, FiSettings, FiDollarSign, FiMapPin, FiFileText, FiEye, FiEdit2, FiTrash2, FiRefreshCw } from "react-icons/fi";
 import '../styles/vehicles.css';
 import '../styles/components.css';
 
@@ -320,7 +321,7 @@ export default function Vehicles() {
               {/* Basic Information Section */}
               <div className="form-section">
                 <h4 className="form-section-title">
-                  Basic Information
+                  <FiTruck size={15} /> Basic Information
                 </h4>
                 <div className="form-grid">
                   <div className="form-group">
@@ -393,7 +394,7 @@ export default function Vehicles() {
               {/* Technical Specifications Section */}
               <div className="form-section">
                 <h4 className="form-section-title">
-                  Technical Specifications
+                  <FiSettings size={15} /> Technical Specifications
                 </h4>
                 <div className="form-grid">
                   <div className="form-group">
@@ -483,7 +484,7 @@ export default function Vehicles() {
               {/* Financial Information Section */}
               <div className="form-section">
                 <h4 className="form-section-title">
-                  Financial Information
+                  <FiDollarSign size={15} /> Financial Information
                 </h4>
                 <div className="form-grid">
                   <div className="form-group">
@@ -536,7 +537,7 @@ export default function Vehicles() {
               {/* Location & Service Section */}
               <div className="form-section">
                 <h4 className="form-section-title">
-                  Location & Service
+                  <FiMapPin size={15} /> Location & Service
                 </h4>
                 <div className="form-grid">
                   <div className="form-group">
@@ -576,7 +577,7 @@ export default function Vehicles() {
               {/* Notes Section */}
               <div className="form-section">
                 <h4 className="form-section-title">
-                  Additional Notes
+                  <FiFileText size={15} /> Additional Notes
                 </h4>
                 <div className="form-grid">
                   <div className="form-group">
@@ -705,21 +706,21 @@ export default function Vehicles() {
                               className="btn-view"
                               title="View complete vehicle history"
                             >
-                              View Details
+                              <FiEye size={13} /> View Details
                             </button>
                             <button
                               onClick={() => handleEdit(vehicle)}
                               className="btn-edit"
                               title="Edit vehicle"
                             >
-                              Edit
+                              <FiEdit2 size={13} /> Edit
                             </button>
                             <button
                               onClick={() => handleDelete(vehicle.id)}
                               className="btn-delete"
                               title="Delete vehicle"
                             >
-                              Delete
+                              <FiTrash2 size={13} /> Delete
                             </button>
                           </div>
                         </td>

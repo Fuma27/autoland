@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import EmployeeDetailsModal from "../components/EmployeeDetailsModal";
+import { FiUser, FiBriefcase, FiCreditCard, FiPhone, FiFileText, FiEye, FiEdit2, FiTrash2 } from "react-icons/fi";
 import '../styles/employees.css';
 import '../styles/components.css';
 
@@ -278,7 +279,7 @@ export default function Employees() {
             <form onSubmit={handleSubmit} className="employee-form">
               {/* Personal Information Section */}
               <div className="form-section">
-                <h4 className="form-section-title">Personal Information</h4>
+                <h4 className="form-section-title"><FiUser size={15} /> Personal Information</h4>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label required">Employee Number</label>
@@ -380,7 +381,7 @@ export default function Employees() {
 
               {/* Employment Information Section */}
               <div className="form-section">
-                <h4 className="form-section-title">Employment Information</h4>
+                <h4 className="form-section-title"><FiBriefcase size={15} /> Employment Information</h4>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label required">Position</label>
@@ -461,7 +462,7 @@ export default function Employees() {
 
               {/* Banking Information Section */}
               <div className="form-section">
-                <h4 className="form-section-title">Banking Information</h4>
+                <h4 className="form-section-title"><FiCreditCard size={15} /> Banking Information</h4>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">Bank Name</label>
@@ -488,7 +489,7 @@ export default function Employees() {
 
               {/* Emergency Contact Section */}
               <div className="form-section">
-                <h4 className="form-section-title">Emergency Contact</h4>
+                <h4 className="form-section-title"><FiPhone size={15} /> Emergency Contact</h4>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">Contact Name</label>
@@ -515,7 +516,7 @@ export default function Employees() {
 
               {/* Notes Section */}
               <div className="form-section">
-                <h4 className="form-section-title">Additional Notes</h4>
+                <h4 className="form-section-title"><FiFileText size={15} /> Additional Notes</h4>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">Notes</label>
@@ -604,19 +605,19 @@ export default function Employees() {
                             onClick={() => handleViewDetails(employee)}
                             className="btn-view"
                           >
-                            View Details
+                            <FiEye size={13} /> View Details
                           </button>
                           <button
                             onClick={() => handleEdit(employee)}
                             className="btn-edit"
                           >
-                            Edit
+                            <FiEdit2 size={13} /> Edit
                           </button>
                           <button
                             onClick={() => handleDelete(employee.id)}
                             className="btn-delete"
                           >
-                            Delete
+                            <FiTrash2 size={13} /> Delete
                           </button>
                         </div>
                       </td>

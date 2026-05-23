@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { FiLogOut, FiUser } from "react-icons/fi";
+import { FiLogOut, FiUser, FiGrid, FiTruck, FiDollarSign, FiBarChart2, FiUsers, FiTrendingUp, FiList } from "react-icons/fi";
 import '../styles/sidebar.css';
 
 export default function Sidebar({ isOpen, onClose }) {
@@ -9,13 +9,13 @@ export default function Sidebar({ isOpen, onClose }) {
   const { user, logout } = useAuth();
   
   const menuItems = [
-    { path: "/dashboard", name: "Dashboard" },
-    { path: "/vehicles", name: "Vehicles" },
-    { path: "/sales", name: "Sales" },
-    { path: "/expenses", name: "Expenses" },
-    { path: "/employees", name: "Employees" },
-    { path: "/financial", name: "Financial" },
-    { path: "/reports", name: "Reports" },
+    { path: "/dashboard", name: "Dashboard", icon: <FiGrid size={16} /> },
+    { path: "/vehicles", name: "Vehicles", icon: <FiTruck size={16} /> },
+    { path: "/sales", name: "Sales", icon: <FiDollarSign size={16} /> },
+    { path: "/expenses", name: "Expenses", icon: <FiList size={16} /> },
+    { path: "/employees", name: "Employees", icon: <FiUsers size={16} /> },
+    { path: "/financial", name: "Financial", icon: <FiBarChart2 size={16} /> },
+    { path: "/reports", name: "Reports", icon: <FiTrendingUp size={16} /> },
   ];
 
   const handleLogout = () => {

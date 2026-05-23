@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import CustomerForm from "../components/CustomerForm";
 import VehicleSearch from "../components/VehicleSearch";
+import { FiTruck, FiUser, FiDollarSign } from "react-icons/fi";
 import '../styles/sales.css';
 import '../styles/components.css';
 
@@ -333,7 +334,7 @@ export default function Sales() {
             <form onSubmit={handleSubmit} className="card-body">
               {/* Vehicle Selection */}
               <div className="form-section">
-                <h4 className="form-section-title">Vehicle Details</h4>
+                <h4 className="form-section-title"><FiTruck size={15} /> Vehicle Details</h4>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label required">Select Vehicle</label>
@@ -377,7 +378,7 @@ export default function Sales() {
 
               {/* Customer Selection */}
               <div className="form-section">
-                <h4 className="form-section-title">Customer Information</h4>
+                <h4 className="form-section-title"><FiUser size={15} /> Customer Information</h4>
                 
                 {/* Search Existing Customer */}
                 <div className="form-group">
@@ -515,7 +516,7 @@ export default function Sales() {
 
               {/* Payment Information */}
               <div className="form-section">
-                <h4 className="form-section-title">Payment Information</h4>
+                <h4 className="form-section-title"><FiDollarSign size={15} /> Payment Information</h4>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label required">Payment Method</label>
