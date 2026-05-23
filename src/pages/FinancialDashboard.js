@@ -183,13 +183,13 @@ export default function FinancialDashboard() {
             className="refresh-btn"
             disabled={loading}
           >
-            {loading ? '⟳ Refreshing...' : '🔄 Refresh Data'}
+            {loading ? 'Refreshing...' : 'Refresh Data'}
           </button>
         </div>
 
         {/* Debug Info */}
         <div style={{ background: '#f0f0f0', padding: '10px', marginBottom: '15px', borderRadius: '5px', fontSize: '12px' }}>
-          <strong>📊 Data Status:</strong> Sales: {sales.length} records | Expenses: {expenses.length} records | 
+          <strong>Data Status:</strong> Sales: {sales.length} records | Expenses: {expenses.length} records | 
           Filtered Sales: {filteredSales.length} | Filtered Expenses: {filteredExpenses.length} |
           Total Revenue: M{totalRevenue.toLocaleString()} | Total Expenses: M{totalExpenses.toLocaleString()}
         </div>

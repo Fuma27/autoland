@@ -278,7 +278,7 @@ export default function Employees() {
             <form onSubmit={handleSubmit} className="employee-form">
               {/* Personal Information Section */}
               <div className="form-section">
-                <h4 className="form-section-title">👤 Personal Information</h4>
+                <h4 className="form-section-title">Personal Information</h4>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label required">Employee Number</label>
@@ -380,7 +380,7 @@ export default function Employees() {
 
               {/* Employment Information Section */}
               <div className="form-section">
-                <h4 className="form-section-title">💼 Employment Information</h4>
+                <h4 className="form-section-title">Employment Information</h4>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label required">Position</label>
@@ -461,7 +461,7 @@ export default function Employees() {
 
               {/* Banking Information Section */}
               <div className="form-section">
-                <h4 className="form-section-title">🏦 Banking Information</h4>
+                <h4 className="form-section-title">Banking Information</h4>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">Bank Name</label>
@@ -488,7 +488,7 @@ export default function Employees() {
 
               {/* Emergency Contact Section */}
               <div className="form-section">
-                <h4 className="form-section-title">🚨 Emergency Contact</h4>
+                <h4 className="form-section-title">Emergency Contact</h4>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">Contact Name</label>
@@ -515,7 +515,7 @@ export default function Employees() {
 
               {/* Notes Section */}
               <div className="form-section">
-                <h4 className="form-section-title">📝 Additional Notes</h4>
+                <h4 className="form-section-title">Additional Notes</h4>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">Notes</label>

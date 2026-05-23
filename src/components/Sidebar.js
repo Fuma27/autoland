@@ -14,8 +14,8 @@ export default function Sidebar({ isOpen, onClose }) {
     { path: "/sales", name: "Sales" },
     { path: "/expenses", name: "Expenses" },
     { path: "/employees", name: "Employees" },
-    { path: "/financial", name: "Financial", icon: "📊" },
-    { path: "/reports", name: "Reports", icon: "📈" },
+    { path: "/financial", name: "Financial" },
+    { path: "/reports", name: "Reports" },
   ];
 
   const handleLogout = () => {

@@ -310,10 +310,10 @@ export default function Sales() {
               <p className="stat-card-title">Total Sales</p>
               <p className="stat-card-value">{summary.total_sales || 0}</p>
               <p className="stat-card-subtext">
-                💰 {summary.cash_sales || 0} Cash | 🏦 {summary.bank_sales || 0} Bank | 📅 {summary.installment_sales || 0} Installment
+                {summary.cash_sales || 0} Cash | {summary.bank_sales || 0} Bank | {summary.installment_sales || 0} Installment
               </p>
               <p className="stat-card-subtext">
-                👥 {summary.unique_customers || 0} Unique Customers
+                {summary.unique_customers || 0} Unique Customers
               </p>
             </div>
           </div>
@@ -333,7 +333,7 @@ export default function Sales() {
             <form onSubmit={handleSubmit} className="card-body">
               {/* Vehicle Selection */}
               <div className="form-section">
-                <h4 className="form-section-title">🚗 Vehicle Details</h4>
+                <h4 className="form-section-title">Vehicle Details</h4>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label required">Select Vehicle</label>
@@ -377,7 +377,7 @@ export default function Sales() {
 
               {/* Customer Selection */}
               <div className="form-section">
-                <h4 className="form-section-title">👤 Customer Information</h4>
+                <h4 className="form-section-title">Customer Information</h4>
                 
                 {/* Search Existing Customer */}
                 <div className="form-group">
@@ -515,7 +515,7 @@ export default function Sales() {
 
               {/* Payment Information */}
               <div className="form-section">
-                <h4 className="form-section-title">💰 Payment Information</h4>
+                <h4 className="form-section-title">Payment Information</h4>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label required">Payment Method</label>

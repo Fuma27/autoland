@@ -320,7 +320,7 @@ export default function Vehicles() {
               {/* Basic Information Section */}
               <div className="form-section">
                 <h4 className="form-section-title">
-                  <span>🚗</span> Basic Information
+                  Basic Information
                 </h4>
                 <div className="form-grid">
                   <div className="form-group">
@@ -393,7 +393,7 @@ export default function Vehicles() {
               {/* Technical Specifications Section */}
               <div className="form-section">
                 <h4 className="form-section-title">
-                  <span>🔧</span> Technical Specifications
+                  Technical Specifications
                 </h4>
                 <div className="form-grid">
                   <div className="form-group">
@@ -483,7 +483,7 @@ export default function Vehicles() {
               {/* Financial Information Section */}
               <div className="form-section">
                 <h4 className="form-section-title">
-                  <span>💰</span> Financial Information
+                  Financial Information
                 </h4>
                 <div className="form-grid">
                   <div className="form-group">
@@ -536,7 +536,7 @@ export default function Vehicles() {
               {/* Location & Service Section */}
               <div className="form-section">
                 <h4 className="form-section-title">
-                  <span>📍</span> Location & Service
+                  Location & Service
                 </h4>
                 <div className="form-grid">
                   <div className="form-group">
@@ -576,7 +576,7 @@ export default function Vehicles() {
               {/* Notes Section */}
               <div className="form-section">
                 <h4 className="form-section-title">
-                  <span>📝</span> Additional Notes
+                  Additional Notes
                 </h4>
                 <div className="form-grid">
                   <div className="form-group">
@@ -705,21 +705,21 @@ export default function Vehicles() {
                               className="btn-view"
                               title="View complete vehicle history"
                             >
-                              📋 View Details
+                              View Details
                             </button>
                             <button
                               onClick={() => handleEdit(vehicle)}
                               className="btn-edit"
                               title="Edit vehicle"
                             >
-                              ✏️ Edit
+                              Edit
                             </button>
                             <button
                               onClick={() => handleDelete(vehicle.id)}
                               className="btn-delete"
                               title="Delete vehicle"
                             >
-                              🗑️ Delete
+                              Delete
                             </button>
                           </div>
                         </td>
