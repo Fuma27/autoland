@@ -11,7 +11,6 @@ const Landing = () => {
       {/* Header */}
       <header className="landing-header">
         <div className="landing-logo">
-          <img src="/autoland-logo.png" alt="Autoland Logo" className="logo-img" style={{ height: '40px', objectFit: 'contain' }} />
           <span className="brand-auto">AUTO</span>
           <span className="brand-land">LAND</span>
         </div>
@@ -46,7 +45,7 @@ const Landing = () => {
       <main className="landing-hero">
         <div className="hero-content">
           <div className="hero-badge">
-            <span>🚀 Dealership Management Redefined</span>
+            <span>Dealership Management Redefined</span>
           </div>
           <h1 className="hero-title">
             Accelerate Your <br />
