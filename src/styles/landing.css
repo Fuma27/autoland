@@ -13,11 +13,19 @@
   max-width: 1280px;
   margin: 0 auto;
   width: 100%;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 639px) {
+  .landing-header {
+    justify-content: center;
+  }
 }
 
 .landing-logo {
