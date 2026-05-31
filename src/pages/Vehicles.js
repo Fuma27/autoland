@@ -4,6 +4,7 @@ import VehicleDetailsModal from "../components/VehicleDetailsModal";
 import { FiTruck, FiSettings, FiDollarSign, FiMapPin, FiFileText, FiEye, FiEdit2, FiTrash2, FiRefreshCw } from "react-icons/fi";
 import '../styles/vehicles.css';
 import '../styles/components.css';
+import '../styles/sidebar.css';
 
 export default function Vehicles() {
   const [vehicles, setVehicles] = useState([]);
@@ -15,6 +16,7 @@ export default function Vehicles() {
   const [success, setSuccess] = useState("");
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   
   const [newVehicle, setNewVehicle] = useState({
     vehicle_name: "",
@@ -252,9 +254,15 @@ export default function Vehicles() {
 
   return (
     <div className="vehicles-container">
-      <Sidebar />
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
       <div className="vehicles-main">
+        <div className="mobile-header">
+          <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>☰</button>
+          <div className="mobile-logo"><span>AUTO</span><span>LAND</span></div>
+          <div style={{ width: 40 }} />
+        </div>
         <div className="vehicles-header">
           <div>
             <h1 className="vehicles-title">Vehicle Management</h1>

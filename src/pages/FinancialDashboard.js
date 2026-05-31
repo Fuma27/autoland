@@ -3,12 +3,14 @@ import Sidebar from "../components/Sidebar";
 import { FiRefreshCw, FiBarChart2 } from "react-icons/fi";
 import '../styles/financial-dashboard.css';
 import '../styles/components.css';
+import '../styles/sidebar.css';
 
 export default function FinancialDashboard() {
   const [sales, setSales] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dateRange, setDateRange] = useState({
     start: new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0],
     end: new Date().toISOString().split('T')[0]
@@ -150,8 +152,14 @@ export default function FinancialDashboard() {
   if (loading && sales.length === 0 && expenses.length === 0) {
     return (
       <div className="financial-wrapper">
-        <Sidebar />
+        {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <div className="financial-main">
+          <div className="mobile-header">
+            <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>☰</button>
+            <div className="mobile-logo"><span>AUTO</span><span>LAND</span></div>
+            <div style={{ width: 40 }} />
+          </div>
           <div className="loading-container">
             <div className="loading-spinner"></div>
             <p>Loading financial data...</p>
@@ -163,9 +171,15 @@ export default function FinancialDashboard() {
 
   return (
     <div className="financial-wrapper">
-      <Sidebar />
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
       <div className="financial-main">
+        <div className="mobile-header">
+          <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>☰</button>
+          <div className="mobile-logo"><span>AUTO</span><span>LAND</span></div>
+          <div style={{ width: 40 }} />
+        </div>
         {/* Header with Refresh Button */}
         <div className="financial-header">
           <div>

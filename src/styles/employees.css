@@ -38,6 +38,7 @@
   background: white;
   border: 1px solid #dee2e6;
   overflow: hidden;
+  overflow-x: auto;
 }
 
 .employees-table {
@@ -141,6 +142,7 @@
   .employees-main {
     margin-left: 0;
     padding: 1rem;
+    padding-top: 0;
   }
   
   .employees-header {
@@ -148,7 +150,28 @@
     align-items: flex-start;
   }
   
+  .employees-table th,
+  .employees-table td {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.7rem;
+  }
+  
   .action-group {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .employees-main {
+    padding: 0.75rem;
+    padding-top: 0;
+  }
+
+  .form-actions {
     flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
   }
 }

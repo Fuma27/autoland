@@ -4,6 +4,7 @@ import EmployeeDetailsModal from "../components/EmployeeDetailsModal";
 import { FiUser, FiBriefcase, FiCreditCard, FiPhone, FiFileText, FiEye, FiEdit2, FiTrash2 } from "react-icons/fi";
 import '../styles/employees.css';
 import '../styles/components.css';
+import '../styles/sidebar.css';
 
 export default function Employees() {
   const [employees, setEmployees] = useState([]);
@@ -15,6 +16,7 @@ export default function Employees() {
   const [success, setSuccess] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   
   const [newEmployee, setNewEmployee] = useState({
     employee_number: "",
@@ -210,9 +212,15 @@ export default function Employees() {
 
   return (
     <div className="employees-wrapper">
-      <Sidebar />
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
       <div className="employees-main">
+        <div className="mobile-header">
+          <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>☰</button>
+          <div className="mobile-logo"><span>AUTO</span><span>LAND</span></div>
+          <div style={{ width: 40 }} />
+        </div>
         <div className="employees-header">
           <div>
             <h1 className="employees-title">Employee Management</h1>

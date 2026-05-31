@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import "../styles/dashboard.css";
 import "../styles/components.css";
+import "../styles/sidebar.css";
 
 function Dashboard() {
   const [sales, setSales] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -34,8 +36,14 @@ function Dashboard() {
 
   return (
     <div className="dashboard-wrapper">
-      <Sidebar />
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <main className="dashboard-main">
+        <div className="mobile-header">
+          <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>☰</button>
+          <div className="mobile-logo"><span>AUTO</span><span>LAND</span></div>
+          <div style={{ width: 40 }} />
+        </div>
         <div className="dashboard-header">
           <h1 className="dashboard-title">Dashboard</h1>
           <p className="dashboard-subtitle">Welcome to AutoLand Management System</p>

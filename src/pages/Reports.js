@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import '../styles/reports.css';
 import '../styles/components.css';
+import '../styles/sidebar.css';
 
 export default function Reports() {
   const [sales, setSales] = useState([]);
@@ -13,6 +14,7 @@ export default function Reports() {
     end: new Date().toISOString().split('T')[0]
   });
   const [reportType, setReportType] = useState("summary");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -157,9 +159,15 @@ export default function Reports() {
 
   return (
     <div className="reports-wrapper">
-      <Sidebar />
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
       <div className="reports-main">
+        <div className="mobile-header">
+          <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>☰</button>
+          <div className="mobile-logo"><span>AUTO</span><span>LAND</span></div>
+          <div style={{ width: 40 }} />
+        </div>
         {/* Header */}
         <div className="reports-header">
           <div>

@@ -20,7 +20,7 @@
 .modal-content {
   background: white;
   border-radius: 0;
-  width: 90%;
+  width: 95%;
   max-width: 500px;
   max-height: 90vh;
   overflow: hidden;
@@ -31,6 +31,7 @@
 
 .modal-lg {
   max-width: 1200px;
+  width: 95%;
 }
 
 .modal-header {
@@ -152,13 +153,24 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .modal-content {
+    width: 98%;
+    max-height: 95vh;
+  }
+
   .modal-lg {
-    width: 95%;
+    width: 98%;
+    max-height: 95vh;
   }
   
   .modal-tabs {
     overflow-x: auto;
     white-space: nowrap;
+    scrollbar-width: none;
+  }
+
+  .modal-tabs::-webkit-scrollbar {
+    display: none;
   }
   
   .details-grid {

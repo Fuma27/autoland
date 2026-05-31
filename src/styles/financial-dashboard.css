@@ -764,6 +764,7 @@
   .financial-main {
     margin-left: 0;
     padding: 1rem;
+    padding-top: 0;
   }
   
   .financial-header {
@@ -783,7 +784,7 @@
   }
   
   .metrics-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
   
   .chart-bars,
@@ -842,6 +843,11 @@
 @media (max-width: 480px) {
   .financial-main {
     padding: 0.75rem;
+    padding-top: 0;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
   }
   
   .metric-card {

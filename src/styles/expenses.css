@@ -8,7 +8,7 @@
 
 .expenses-main {
   flex: 1;
-  margin-left: 280px;
+  margin-left: 260px;
   padding: 2rem;
   background: #f3f4f6;
   min-height: 100vh;
@@ -208,6 +208,7 @@
   border-radius: 0;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  overflow-x: auto;
 }
 
 .table-header {
@@ -363,6 +364,7 @@
   .expenses-main {
     margin-left: 0;
     padding: 1rem;
+    padding-top: 0;
   }
   
   .expenses-header {
@@ -371,7 +373,7 @@
   }
   
   .expenses-stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
   
@@ -385,6 +387,11 @@
 @media (max-width: 480px) {
   .expenses-main {
     padding: 0.75rem;
+    padding-top: 0;
+  }
+  
+  .expenses-stats-grid {
+    grid-template-columns: 1fr;
   }
   
   .stat-card-value {

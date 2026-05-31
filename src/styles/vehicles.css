@@ -6,7 +6,7 @@
 
 .vehicles-main {
   flex: 1;
-  margin-left: 280px;
+  margin-left: 260px;
   padding: 2rem;
   background: #f3f4f6;
   min-height: 100vh;
@@ -124,6 +124,7 @@
   border-radius: 0;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  overflow-x: auto;
 }
 
 .vehicle-table {
@@ -269,10 +270,23 @@
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+  .vehicles-main {
+    margin-left: 260px;
+    padding: 1.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .vehicles-main {
     margin-left: 0;
     padding: 1rem;
+    padding-top: 0;
+  }
+  
+  .vehicles-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
   
   .financial-summary-grid {
@@ -280,11 +294,31 @@
   }
   
   .action-group {
-    flex-direction: column;
+    flex-wrap: wrap;
   }
   
   .vehicle-table th,
   .vehicle-table td {
     padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .vehicles-main {
+    padding: 0.75rem;
+    padding-top: 0;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+
+  .stat-card-value {
+    font-size: 1.5rem;
   }
 }

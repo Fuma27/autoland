@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import '../styles/expenses.css';
 import '../styles/components.css';
+import '../styles/sidebar.css';
 
 export default function Expenses() {
   const [expenses, setExpenses] = useState([]);
@@ -15,6 +16,7 @@ export default function Expenses() {
     amount: "",
     date: new Date().toISOString().split('T')[0]
   });
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     fetchExpenses();
@@ -107,9 +109,15 @@ export default function Expenses() {
 
   return (
     <div className="expenses-wrapper">
-      <Sidebar />
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
       <div className="expenses-main">
+        <div className="mobile-header">
+          <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>☰</button>
+          <div className="mobile-logo"><span>AUTO</span><span>LAND</span></div>
+          <div style={{ width: 40 }} />
+        </div>
         {/* Header */}
         <div className="expenses-header">
           <div>

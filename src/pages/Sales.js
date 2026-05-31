@@ -5,6 +5,7 @@ import VehicleSearch from "../components/VehicleSearch";
 import { FiTruck, FiUser, FiDollarSign } from "react-icons/fi";
 import '../styles/sales.css';
 import '../styles/components.css';
+import '../styles/sidebar.css';
 
 export default function Sales() {
   const [sales, setSales] = useState([]);
@@ -24,6 +25,7 @@ export default function Sales() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   
   const [newSale, setNewSale] = useState({
     vehicle_id: "",
@@ -250,10 +252,16 @@ export default function Sales() {
   };
 
   return (
-    <>
-      <Sidebar />
-      
+    <div className="sales-wrapper">
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
       <div className="sales-main">
+        <div className="mobile-header">
+          <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>☰</button>
+          <div className="mobile-logo"><span>AUTO</span><span>LAND</span></div>
+          <div style={{ width: 40 }} />
+        </div>
         {/* Header */}
         <div className="d-flex justify-between align-center mb-4">
           <div>
@@ -771,6 +779,6 @@ export default function Sales() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
