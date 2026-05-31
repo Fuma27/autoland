@@ -242,6 +242,248 @@ export default function Sales() {
     setShowCustomerForm(false);
   };
 
+  const handleDownloadInvoice = (sale) => {
+    const balance = sale.amount - sale.amount_paid;
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Invoice - #${sale.id}</title>
+          <style>
+            body {
+              font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+              color: #333;
+              padding: 40px;
+              line-height: 1.6;
+            }
+            .invoice-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              border-bottom: 3px solid #000;
+              padding-bottom: 20px;
+              margin-bottom: 30px;
+            }
+            .logo-section img {
+              height: 50px;
+              object-fit: contain;
+            }
+            .logo-section h2 {
+              margin: 5px 0 0 0;
+              font-size: 24px;
+              font-weight: 800;
+              letter-spacing: 1px;
+            }
+            .logo-section h2 span:first-child {
+              color: #000;
+            }
+            .logo-section h2 span:last-child {
+              color: #0e48f1;
+            }
+            .company-info {
+              text-align: right;
+              font-size: 14px;
+            }
+            .invoice-title-section {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 30px;
+            }
+            .invoice-title {
+              font-size: 28px;
+              font-weight: bold;
+              text-transform: uppercase;
+              color: #111;
+            }
+            .invoice-meta {
+              font-size: 14px;
+              text-align: right;
+            }
+            .grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 40px;
+              margin-bottom: 40px;
+            }
+            .section-title {
+              font-size: 16px;
+              font-weight: bold;
+              text-transform: uppercase;
+              border-bottom: 1px solid #ddd;
+              padding-bottom: 5px;
+              margin-bottom: 15px;
+              color: #555;
+            }
+            .details p {
+              margin: 4px 0;
+              font-size: 14px;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 40px;
+            }
+            th, td {
+              padding: 12px;
+              text-align: left;
+              border-bottom: 1px solid #ddd;
+            }
+            th {
+              background-color: #f8f9fa;
+              font-weight: bold;
+              text-transform: uppercase;
+              font-size: 13px;
+            }
+            .text-right {
+              text-align: right;
+            }
+            .totals-section {
+              width: 300px;
+              margin-left: auto;
+              margin-bottom: 40px;
+            }
+            .totals-row {
+              display: flex;
+              justify-content: space-between;
+              padding: 8px 0;
+              font-size: 14px;
+            }
+            .totals-row.grand-total {
+              border-top: 2px solid #000;
+              border-bottom: 2px solid #000;
+              font-weight: bold;
+              font-size: 18px;
+              padding: 12px 0;
+            }
+            .footer {
+              text-align: center;
+              font-size: 12px;
+              color: #777;
+              border-top: 1px solid #eee;
+              padding-top: 20px;
+              margin-top: 50px;
+            }
+            @media print {
+              body { padding: 20px; }
+              .no-print { display: none; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="invoice-header">
+            <div class="logo-section">
+              <img src="/autoland-logo.png" alt="AutoLand Logo" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';" />
+              <div id="logo-fallback" style="display:none; font-size: 24px; font-weight: 800;"><span style="color:#000;">AUTO</span><span style="color:#0e48f1;">LAND</span></div>
+            </div>
+            <div class="company-info">
+              <strong>AutoLand Dealership</strong><br />
+              123 Main Road, Showroom District<br />
+              Maseru, Lesotho<br />
+              Phone: +266 2231 1234<br />
+              Email: billing@autoland.co.ls
+            </div>
+          </div>
+
+          <div class="invoice-title-section">
+            <div>
+              <span class="invoice-title">Sales Invoice</span>
+            </div>
+            <div class="invoice-meta">
+              <strong>Invoice #:</strong> INV-${sale.id.toString().padStart(6, '0')}<br />
+              <strong>Date:</strong> ${new Date(sale.sale_date).toLocaleDateString()}<br />
+              <strong>Payment Method:</strong> ${sale.payment_method}<br />
+              <strong>Status:</strong> ${sale.payment_status}
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="details">
+              <div class="section-title">Bill To</div>
+              <p><strong>Customer Name:</strong> ${sale.first_name} ${sale.last_name}</p>
+              <p><strong>National ID:</strong> ${sale.id_number || 'N/A'}</p>
+              <p><strong>Phone:</strong> ${sale.phone || 'N/A'}</p>
+              <p><strong>Email:</strong> ${sale.email || 'N/A'}</p>
+              <p><strong>Address:</strong> ${sale.address || ''}, ${sale.city || ''}</p>
+            </div>
+            <div class="details">
+              <div class="section-title">Seller Info</div>
+              <p><strong>Representative:</strong> ${sale.salesperson || 'AutoLand Sales Team'}</p>
+              <p><strong>Store Location:</strong> Main Showroom</p>
+              <p><strong>Warranty:</strong> 12 Months Limited Dealer Warranty</p>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Vehicle Description</th>
+                <th>Make & Model</th>
+                <th>Registration</th>
+                <th class="text-right">Qty</th>
+                <th class="text-right">Unit Price</th>
+                <th class="text-right">Total Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>${sale.vehicle_name}</strong></td>
+                <td>${sale.make} ${sale.model}</td>
+                <td>${sale.registration_number || 'N/A'}</td>
+                <td class="text-right">${sale.quantity_sold}</td>
+                <td class="text-right">M${Number(sale.amount / sale.quantity_sold).toLocaleString()}</td>
+                <td class="text-right">M${Number(sale.amount).toLocaleString()}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="totals-section">
+            <div class="totals-row">
+              <span>Subtotal:</span>
+              <span>M${Number(sale.amount).toLocaleString()}</span>
+            </div>
+            <div class="totals-row">
+              <span>Amount Paid:</span>
+              <span style="color: green; font-weight: 500;">M${Number(sale.amount_paid).toLocaleString()}</span>
+            </div>
+            <div class="totals-row" style="border-top: 1px dashed #ddd; padding-top: 8px;">
+              <span>Balance Due:</span>
+              <span style="color: ${balance > 0 ? 'red' : 'inherit'}; font-weight: 500;">
+                M${balance > 0 ? balance.toLocaleString() : '0.00'}
+              </span>
+            </div>
+            <div class="totals-row grand-total">
+              <span>Grand Total:</span>
+              <span>M${Number(sale.amount).toLocaleString()}</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 60px; display: flex; justify-content: space-between;">
+            <div style="width: 200px; border-top: 1px solid #333; text-align: center; padding-top: 5px; font-size: 13px;">
+              Customer Signature
+            </div>
+            <div style="width: 200px; border-top: 1px solid #333; text-align: center; padding-top: 5px; font-size: 13px;">
+              Authorized Signature
+            </div>
+          </div>
+
+          <div class="footer">
+            Thank you for your business! AutoLand is registered in Lesotho. Terms & conditions apply.
+          </div>
+
+          <script>
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+                window.close();
+              }, 500);
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
   const getPaymentStatusColor = (status) => {
     switch(status) {
       case 'Paid': return 'badge-success';
@@ -672,17 +914,28 @@ export default function Sales() {
                       </td>
                       <td>{new Date(sale.sale_date).toLocaleDateString()}</td>
                       <td>
-                        {sale.payment_status !== 'Paid' && (
+                        <div className="action-group" style={{ display: 'flex', gap: '6px' }}>
                           <button
-                            onClick={() => {
-                              setSelectedSale(sale);
-                              setShowPaymentModal(true);
-                            }}
-                            className="btn btn-primary btn-sm"
+                            onClick={() => handleDownloadInvoice(sale)}
+                            className="btn btn-secondary btn-sm"
+                            title="Print Invoice"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 8px', fontSize: '11px' }}
                           >
-                            Record Payment
+                            📄 Invoice
                           </button>
-                        )}
+                          {sale.payment_status !== 'Paid' && (
+                            <button
+                              onClick={() => {
+                                setSelectedSale(sale);
+                                setShowPaymentModal(true);
+                              }}
+                              className="btn btn-primary btn-sm"
+                              style={{ padding: '4px 8px', fontSize: '11px' }}
+                            >
+                              Record Payment
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );

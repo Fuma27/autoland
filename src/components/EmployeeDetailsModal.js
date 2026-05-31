@@ -69,6 +69,244 @@ export default function EmployeeDetailsModal({ employeeId, onClose, onUpdate }) 
     }
   };
 
+  const handlePrintEmployeeDetails = () => {
+    if (!employeeData) return;
+    const { employee, salary_history } = employeeData;
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>${employee.first_name} ${employee.last_name} - Profile</title>
+          <style>
+            body {
+              font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+              color: #333;
+              padding: 40px;
+              line-height: 1.5;
+            }
+            .header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              border-bottom: 3px solid #000;
+              padding-bottom: 20px;
+              margin-bottom: 30px;
+            }
+            .logo-section h2 {
+              margin: 5px 0 0 0;
+              font-size: 24px;
+              font-weight: 800;
+            }
+            .logo-section h2 span:first-child { color: #000; }
+            .logo-section h2 span:last-child { color: #0e48f1; }
+            .title {
+              font-size: 22px;
+              font-weight: bold;
+              text-transform: uppercase;
+              margin-bottom: 5px;
+            }
+            .subtitle {
+              font-size: 14px;
+              color: #666;
+            }
+            .section {
+              margin-bottom: 30px;
+            }
+            .section-title {
+              font-size: 15px;
+              font-weight: bold;
+              text-transform: uppercase;
+              background-color: #f3f4f6;
+              padding: 8px 12px;
+              margin-bottom: 15px;
+              border-left: 4px solid #0e48f1;
+            }
+            .grid {
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 15px;
+            }
+            .item {
+              background-color: #fafafa;
+              padding: 10px;
+              border: 1px solid #eee;
+            }
+            .item-label {
+              font-size: 11px;
+              color: #777;
+              text-transform: uppercase;
+              margin: 0 0 5px 0;
+            }
+            .item-value {
+              font-size: 14px;
+              font-weight: bold;
+              margin: 0;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 10px;
+            }
+            th, td {
+              padding: 10px;
+              text-align: left;
+              border-bottom: 1px solid #eee;
+              font-size: 13px;
+            }
+            th {
+              background-color: #f9fafb;
+              font-weight: bold;
+            }
+            .text-danger { color: #ef4444; }
+            .text-success { color: #10b981; }
+            .footer {
+              text-align: center;
+              font-size: 11px;
+              color: #777;
+              border-top: 1px solid #eee;
+              padding-top: 20px;
+              margin-top: 40px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div class="logo-section">
+              <img src="/autoland-logo.png" alt="AutoLand Logo" style="height: 40px; object-fit: contain;" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';" />
+              <div id="logo-fallback" style="display:none; font-size: 24px; font-weight: 800;"><span style="color:#000;">AUTO</span><span style="color:#0e48f1;">LAND</span></div>
+            </div>
+            <div style="text-align: right;">
+              <div class="title">Employee Profile & Details</div>
+              <div class="subtitle">Generated on ${new Date().toLocaleDateString()}</div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">Personal & Employment Information</div>
+            <div class="grid">
+              <div class="item">
+                <p class="item-label">Employee Number</p>
+                <p class="item-value font-mono">${employee.employee_number}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Full Name</p>
+                <p class="item-value">${employee.first_name} ${employee.last_name}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">ID Number</p>
+                <p class="item-value">${employee.id_number}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Position</p>
+                <p class="item-value">${employee.position}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Department</p>
+                <p class="item-value">${employee.department}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Hire Date</p>
+                <p class="item-value">${employee.hire_date}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Employment Type</p>
+                <p class="item-value">${employee.employment_type}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Basic Salary</p>
+                <p class="item-value">M${Number(employee.basic_salary).toLocaleString()}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Status</p>
+                <p class="item-value">${employee.status}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">Contact & Banking Details</div>
+            <div class="grid">
+              <div class="item">
+                <p class="item-label">Email</p>
+                <p class="item-value">${employee.email || 'N/A'}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Phone</p>
+                <p class="item-value">${employee.phone}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Address</p>
+                <p class="item-value">${employee.address || 'N/A'}, ${employee.city || ''}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Bank Name</p>
+                <p class="item-value">${employee.bank_name || 'N/A'}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Bank Account Number</p>
+                <p class="item-value">${employee.bank_account_number || 'N/A'}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Emergency Contact</p>
+                <p class="item-value">${employee.emergency_contact_name || 'N/A'} (${employee.emergency_contact_phone || 'N/A'})</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">Salary & Payment History</div>
+            ${salary_history.length === 0 ? `
+              <p style="font-size: 13px; color: #777;">No salary records found.</p>
+            ` : `
+              <table>
+                <thead>
+                  <tr>
+                    <th>Payment Date</th>
+                    <th>Month</th>
+                    <th>Basic Salary</th>
+                    <th>Bonus</th>
+                    <th>Deductions</th>
+                    <th>Tax</th>
+                    <th>Net Paid</th>
+                    <th>Method</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${salary_history.map(record => `
+                    <tr>
+                      <td>${record.payment_date}</td>
+                      <td>${record.payment_month}</td>
+                      <td>M${Number(record.basic_salary).toLocaleString()}</td>
+                      <td class="text-success">M${Number(record.bonus).toLocaleString()}</td>
+                      <td class="text-danger">M${Number(record.deductions).toLocaleString()}</td>
+                      <td class="text-danger">M${Number(record.tax_amount).toLocaleString()}</td>
+                      <td class="fw-600">M${Number(record.net_salary).toLocaleString()}</td>
+                      <td>${record.payment_method}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            `}
+          </div>
+
+          <div class="footer">
+            AutoLand Management System - Confidential Employee Record
+          </div>
+
+          <script>
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+                window.close();
+              }, 500);
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
   if (loading) {
     return (
       <div className="modal-overlay" onClick={onClose}>
@@ -86,10 +324,19 @@ export default function EmployeeDetailsModal({ employeeId, onClose, onUpdate }) 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content modal-lg" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header bg-primary">
-          <h2 className="modal-title text-white">
-            {employee.first_name} {employee.last_name}
-          </h2>
+        <div className="modal-header bg-primary" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <h2 className="modal-title text-white">
+              {employee.first_name} {employee.last_name}
+            </h2>
+            <button 
+              onClick={handlePrintEmployeeDetails} 
+              className="btn btn-secondary btn-sm"
+              style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', color: 'white', border: 'none', padding: '4px 10px', fontSize: '12px', cursor: 'pointer' }}
+            >
+              📄 Print / Profile
+            </button>
+          </div>
           <button className="modal-close text-white" onClick={onClose}>×</button>
         </div>
 

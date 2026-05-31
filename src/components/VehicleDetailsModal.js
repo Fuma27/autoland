@@ -127,6 +127,271 @@ export default function VehicleDetailsModal({ vehicleId, onClose, onUpdate }) {
     }
   };
 
+  const handlePrintVehicleDetails = () => {
+    if (!vehicleData) return;
+    const { vehicle, maintenance_records, repair_history, total_maintenance_cost, total_repair_cost } = vehicleData;
+    const printWindow = window.open("", "_blank");
+    
+    const totalMaintenance = Number(total_maintenance_cost || 0);
+    const totalRepair = Number(total_repair_cost || 0);
+    const totalCost = Number(vehicle.purchase_price) + Number(vehicle.repair_cost || 0) + totalMaintenance + totalRepair;
+    const profitLoss = vehicle.selling_price - totalCost;
+    
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>${vehicle.vehicle_name} - Spec Sheet</title>
+          <style>
+            body {
+              font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+              color: #333;
+              padding: 40px;
+              line-height: 1.5;
+            }
+            .header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              border-bottom: 3px solid #000;
+              padding-bottom: 20px;
+              margin-bottom: 30px;
+            }
+            .logo-section h2 {
+              margin: 5px 0 0 0;
+              font-size: 24px;
+              font-weight: 800;
+            }
+            .logo-section h2 span:first-child { color: #000; }
+            .logo-section h2 span:last-child { color: #0e48f1; }
+            .title {
+              font-size: 22px;
+              font-weight: bold;
+              text-transform: uppercase;
+              margin-bottom: 5px;
+            }
+            .subtitle {
+              font-size: 14px;
+              color: #666;
+            }
+            .section {
+              margin-bottom: 30px;
+            }
+            .section-title {
+              font-size: 15px;
+              font-weight: bold;
+              text-transform: uppercase;
+              background-color: #f3f4f6;
+              padding: 8px 12px;
+              margin-bottom: 15px;
+              border-left: 4px solid #0e48f1;
+            }
+            .grid {
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 15px;
+            }
+            .item {
+              background-color: #fafafa;
+              padding: 10px;
+              border: 1px solid #eee;
+            }
+            .item-label {
+              font-size: 11px;
+              color: #777;
+              text-transform: uppercase;
+              margin: 0 0 5px 0;
+            }
+            .item-value {
+              font-size: 14px;
+              font-weight: bold;
+              margin: 0;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 10px;
+            }
+            th, td {
+              padding: 10px;
+              text-align: left;
+              border-bottom: 1px solid #eee;
+              font-size: 13px;
+            }
+            th {
+              background-color: #f9fafb;
+              font-weight: bold;
+            }
+            .text-danger { color: #ef4444; }
+            .text-success { color: #10b981; }
+            .footer {
+              text-align: center;
+              font-size: 11px;
+              color: #777;
+              border-top: 1px solid #eee;
+              padding-top: 20px;
+              margin-top: 40px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div class="logo-section">
+              <img src="/autoland-logo.png" alt="AutoLand Logo" style="height: 40px; object-fit: contain;" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';" />
+              <div id="logo-fallback" style="display:none; font-size: 24px; font-weight: 800;"><span style="color:#000;">AUTO</span><span style="color:#0e48f1;">LAND</span></div>
+            </div>
+            <div style="text-align: right;">
+              <div class="title">Vehicle Spec Sheet & History</div>
+              <div class="subtitle">Generated on ${new Date().toLocaleDateString()}</div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">Basic Information & Technical Specs</div>
+            <div class="grid">
+              <div class="item">
+                <p class="item-label">Vehicle Name</p>
+                <p class="item-value">${vehicle.vehicle_name || `${vehicle.make} ${vehicle.model}`}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Make & Model</p>
+                <p class="item-value">${vehicle.make} ${vehicle.model}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Year</p>
+                <p class="item-value">${vehicle.year}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">VIN</p>
+                <p class="item-value">${vehicle.vin || 'N/A'}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Registration Number</p>
+                <p class="item-value">${vehicle.registration_number || 'N/A'}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Engine Size</p>
+                <p class="item-value">${vehicle.engine_size || 'N/A'}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Transmission</p>
+                <p class="item-value">${vehicle.transmission || 'N/A'}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Fuel Type</p>
+                <p class="item-value">${vehicle.fuel_type || 'N/A'}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Color</p>
+                <p class="item-value">${vehicle.color || 'N/A'}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Mileage</p>
+                <p class="item-value">${vehicle.mileage ? `${Number(vehicle.mileage).toLocaleString()} km` : 'N/A'}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Condition</p>
+                <p class="item-value">${vehicle.vehicle_condition || 'N/A'}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Status</p>
+                <p class="item-value">${vehicle.status}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">Cost Analysis & Valuation</div>
+            <div class="grid">
+              <div class="item">
+                <p class="item-label">Purchase Price</p>
+                <p class="item-value">M${Number(vehicle.purchase_price).toLocaleString()}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Initial Repairs</p>
+                <p class="item-value">M${Number(vehicle.repair_cost || 0).toLocaleString()}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Ongoing Maintenance</p>
+                <p class="item-value">M${totalMaintenance.toLocaleString()}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Ongoing Repairs</p>
+                <p class="item-value">M${totalRepair.toLocaleString()}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Total Investment</p>
+                <p class="item-value text-danger">M${totalCost.toLocaleString()}</p>
+              </div>
+              <div class="item">
+                <p class="item-label">Selling Price</p>
+                <p class="item-value">M${Number(vehicle.selling_price).toLocaleString()}</p>
+              </div>
+              <div class="item" style="grid-column: span 3; background-color: #f0fdf4;">
+                <p class="item-label">Net Profit / Loss</p>
+                <p class="item-value ${profitLoss >= 0 ? 'text-success' : 'text-danger'}" style="font-size: 18px;">
+                  M${profitLoss.toLocaleString()} (${totalCost > 0 ? ((profitLoss / totalCost) * 100).toFixed(1) : 0}% ROI)
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">Maintenance & Repair Log</div>
+            ${maintenance_records.length === 0 && repair_history.length === 0 ? `
+              <p style="font-size: 13px; color: #777;">No repair or maintenance history logged for this vehicle.</p>
+            ` : `
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th style="text-align: right;">Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${maintenance_records.map(record => `
+                    <tr>
+                      <td>${record.maintenance_date}</td>
+                      <td>${record.maintenance_type}</td>
+                      <td>${record.description}</td>
+                      <td>Maintenance</td>
+                      <td style="text-align: right;" class="text-danger">M${Number(record.cost).toLocaleString()}</td>
+                    </tr>
+                  `).join('')}
+                  ${repair_history.map(record => `
+                    <tr>
+                      <td>${record.repair_date}</td>
+                      <td>${record.repair_type}</td>
+                      <td>${record.description}</td>
+                      <td>Repair</td>
+                      <td style="text-align: right;" class="text-danger">M${Number(record.total_cost).toLocaleString()}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            `}
+          </div>
+
+          <div class="footer">
+            AutoLand Management System - Internal Vehicle Record
+          </div>
+
+          <script>
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+                window.close();
+              }, 500);
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
   if (loading) {
     return (
       <div className="modal-overlay" onClick={onClose}>
@@ -144,10 +409,19 @@ export default function VehicleDetailsModal({ vehicleId, onClose, onUpdate }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content modal-lg" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header bg-primary">
-          <h2 className="modal-title text-white">
-            {vehicle.vehicle_name || `${vehicle.make} ${vehicle.model}`}
-          </h2>
+        <div className="modal-header bg-primary" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <h2 className="modal-title text-white">
+              {vehicle.vehicle_name || `${vehicle.make} ${vehicle.model}`}
+            </h2>
+            <button 
+              onClick={handlePrintVehicleDetails} 
+              className="btn btn-secondary btn-sm"
+              style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', color: 'white', border: 'none', padding: '4px 10px', fontSize: '12px', cursor: 'pointer' }}
+            >
+              📄 Print / Spec Sheet
+            </button>
+          </div>
           <button className="modal-close text-white" onClick={onClose}>×</button>
         </div>
 
