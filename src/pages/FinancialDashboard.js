@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
-import { FiRefreshCw, FiBarChart2 } from "react-icons/fi";
+import { FiRefreshCw, FiBarChart2, FiCheckCircle, FiAlertCircle, FiInfo, FiZap } from "react-icons/fi";
 import '../styles/financial-dashboard.css';
 import '../styles/components.css';
 import '../styles/sidebar.css';
@@ -149,6 +149,131 @@ export default function FinancialDashboard() {
   const maxRevenue = Math.max(...monthlyRevenue, ...monthlyExpenses, 1000);
   const maxChartHeight = 150;
 
+  // Generate dynamic, analytical business insights based on current data
+  const generateFinancialInsights = () => {
+    const insights = [];
+    
+    if (filteredSales.length === 0 && filteredExpenses.length === 0) {
+      return [{
+        type: 'neutral',
+        title: 'No Data for Analysis',
+        text: 'Add transaction records for the selected period to generate financial insights.'
+      }];
+    }
+
+    // 1. Profit Margin Health
+    if (totalRevenue > 0) {
+      const margin = Number(profitMargin);
+      if (margin >= 25) {
+        insights.push({
+          type: 'success',
+          title: 'Exceptional Profit Margin',
+          text: `Your net profit margin is ${profitMargin}%, which is significantly higher than the typical dealership average of 8-12%. This indicates strong pricing power and excellent cost controls.`
+        });
+      } else if (margin >= 10) {
+        insights.push({
+          type: 'success',
+          title: 'Healthy Profit Margin',
+          text: `Your net profit margin is ${profitMargin}%, matching target automotive standards. Operations are healthy and financially stable.`
+        });
+      } else if (margin > 0) {
+        insights.push({
+          type: 'warning',
+          title: 'Thin Profit Margin',
+          text: `Your net profit margin is currently ${profitMargin}%. Consider reviewing vehicle acquisition costs, reducing minor overheads, or adjusting pricing strategies to hit a target of 12%+ margin.`
+        });
+      } else {
+        insights.push({
+          type: 'danger',
+          title: 'Operating at a Loss',
+          text: `Your business is operating at a net loss of M${Math.abs(netProfit).toLocaleString()} for this period. Immediate review of fixed operating overheads and vehicle pricing is required.`
+        });
+      }
+    }
+
+    // 2. Expense Concentration (Overhead ratio)
+    if (totalRevenue > 0 && totalExpenses > 0) {
+      const expenseRatio = (totalExpenses / totalRevenue) * 100;
+      if (expenseRatio > 50) {
+        insights.push({
+          type: 'danger',
+          title: 'High Operational Cost Ratio',
+          text: `Expenses represent ${expenseRatio.toFixed(1)}% of your revenue. Over half of incoming revenue is consumed by expenses. Audit variable costs and look for immediate operational efficiencies.`
+        });
+      } else if (expenseRatio > 30) {
+        insights.push({
+          type: 'warning',
+          title: 'Moderate Operating Costs',
+          text: `Operating expenses are consuming ${expenseRatio.toFixed(1)}% of total revenue. Monitor these costs closely to prevent them from diluting net profit margins.`
+        });
+      } else {
+        insights.push({
+          type: 'success',
+          title: 'Highly Efficient Operations',
+          text: `Excellent expense management. Operating costs represent only ${expenseRatio.toFixed(1)}% of total revenue, enabling high net cash retention.`
+        });
+      }
+    }
+
+    // 3. Brand Concentration (Vehicle Makes)
+    if (topMakes.length > 0) {
+      const [topMake, topMakeAmount] = topMakes[0];
+      const topMakePercent = totalRevenue > 0 ? ((topMakeAmount / totalRevenue) * 100).toFixed(1) : 0;
+      if (Number(topMakePercent) > 50) {
+        insights.push({
+          type: 'warning',
+          title: `High Dependancy on ${topMake}`,
+          text: `${topMake} sales account for ${topMakePercent}% of your total revenue. While highly profitable, this brand concentration poses a supplier risk. Consider diversifying inventory brands.`
+        });
+      } else {
+        insights.push({
+          type: 'success',
+          title: `Top Sales Driver: ${topMake}`,
+          text: `${topMake} vehicles are leading your sales charts, generating M${topMakeAmount.toLocaleString()} (${topMakePercent}% of total revenue).`
+        });
+      }
+    }
+
+    // 4. Liquidity and Cash Flow Risk
+    if (paymentTotal > 0) {
+      const installmentPercent = (paymentBreakdown.Installment / paymentTotal) * 100;
+      if (installmentPercent > 50) {
+        insights.push({
+          type: 'warning',
+          title: 'Cash Flow Liquidity Risk',
+          text: `Installment sales represent ${installmentPercent.toFixed(1)}% of your payment mix. While installment options attract more buyers, it delays liquid cash collection. Ensure strict collection policies are in place.`
+        });
+      } else if (installmentPercent > 20) {
+        insights.push({
+          type: 'neutral',
+          title: 'Balanced Cash Flow',
+          text: `Installments account for ${installmentPercent.toFixed(1)}% of sales. This maintains healthy upfront cash (liquidity) while building a predictable, recurring monthly revenue stream.`
+        });
+      } else {
+        insights.push({
+          type: 'success',
+          title: 'Strong Cash Liquidity',
+          text: `Liquid transactions (Cash/Bank Transfer) account for ${(100 - installmentPercent).toFixed(1)}% of sales. Your business has excellent cash flow to immediately reinvest in inventory.`
+        });
+      }
+    }
+
+    // 5. Team Sales Dispersion
+    if (topSalespersons.length > 0) {
+      const [topRep, topRepAmount] = topSalespersons[0];
+      const topRepPercent = totalRevenue > 0 ? ((topRepAmount / totalRevenue) * 100).toFixed(1) : 0;
+      if (Number(topRepPercent) > 40 && topRep !== 'Unassigned') {
+        insights.push({
+          type: 'neutral',
+          title: `Sales Dependency: ${topRep}`,
+          text: `Salesperson ${topRep} generated ${topRepPercent}% of your revenue (M${topRepAmount.toLocaleString()}). Establish mentorship or run training programs to distribute sales capacity more evenly.`
+        });
+      }
+    }
+
+    return insights;
+  };
+
   if (loading && sales.length === 0 && expenses.length === 0) {
     return (
       <div className="financial-wrapper">
@@ -266,6 +391,29 @@ export default function FinancialDashboard() {
             </div>
           </div>
         </div>
+
+        {/* Financial Analysis & Recommendations */}
+        {(totalRevenue > 0 || totalExpenses > 0) && (
+          <div className="insights-card">
+            <div className="insights-header">
+              <h3 className="insights-title"><FiZap size={16} /> Business Financial Analysis & Insights</h3>
+            </div>
+            <div className="insights-grid">
+              {generateFinancialInsights().map((insight, idx) => (
+                <div key={idx} className={`insight-item ${insight.type}`}>
+                  <div className="insight-title-row">
+                    {insight.type === 'success' && <FiCheckCircle className="insight-icon" />}
+                    {insight.type === 'warning' && <FiAlertCircle className="insight-icon" />}
+                    {insight.type === 'danger' && <FiAlertCircle className="insight-icon" />}
+                    {insight.type === 'neutral' && <FiInfo className="insight-icon" />}
+                    <span>{insight.title}</span>
+                  </div>
+                  <div className="insight-description">{insight.text}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Revenue & Profit Trend Chart */}
         {(totalRevenue > 0 || totalExpenses > 0) ? (

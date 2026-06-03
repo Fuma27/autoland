@@ -928,3 +928,110 @@
     page-break-inside: avoid;
   }
 }
+
+/* Financial Insights Panel */
+.insights-card {
+  background: white;
+  border: 1px solid #dee2e6;
+  margin-bottom: 1.5rem;
+  border-radius: 0;
+  overflow: hidden;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.insights-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f9fa;
+}
+
+.insights-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0d1b2a;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  padding: 1.2rem;
+}
+
+.insight-item {
+  padding: 1rem;
+  border-left: 4px solid #dee2e6;
+  background: #f8f9fa;
+  border-radius: 4px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.insight-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.insight-item.success {
+  border-left-color: #10b981;
+  background-color: #f0fdf4;
+}
+
+.insight-item.warning {
+  border-left-color: #f59e0b;
+  background-color: #fffbeb;
+}
+
+.insight-item.danger {
+  border-left-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+.insight-item.neutral {
+  border-left-color: #0e48f1;
+  background-color: #eff6ff;
+}
+
+.insight-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.insight-item.success .insight-title-row {
+  color: #15803d;
+}
+
+.insight-item.warning .insight-title-row {
+  color: #b45309;
+}
+
+.insight-item.danger .insight-title-row {
+  color: #b91c1c;
+}
+
+.insight-item.neutral .insight-title-row {
+  color: #1d4ed8;
+}
+
+.insight-description {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.insight-icon {
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+}
