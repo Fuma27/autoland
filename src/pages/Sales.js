@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import CustomerForm from "../components/CustomerForm";
 import VehicleSearch from "../components/VehicleSearch";
-import { FiTruck, FiUser, FiDollarSign } from "react-icons/fi";
+import { FiTruck, FiUser, FiDollarSign, FiMail, FiPrinter } from "react-icons/fi";
 import '../styles/sales.css';
 import '../styles/components.css';
 import '../styles/sidebar.css';
@@ -10,11 +10,12 @@ import '../styles/sidebar.css';
 export default function Sales() {
   const [sales, setSales] = useState([]);
   const [vehicles, setVehicles] = useState([]);
-  const [, setCustomers] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const [summary, setSummary] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [showCustomerForm, setShowCustomerForm] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
   const [selectedSale, setSelectedSale] = useState(null);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -22,9 +23,11 @@ export default function Sales() {
   const [customerSearchResults, setCustomerSearchResults] = useState([]);
   const [showCustomerResults, setShowCustomerResults] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   
   const [newSale, setNewSale] = useState({
@@ -55,7 +58,7 @@ export default function Sales() {
   const fetchSales = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/sales`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/sales`);
       const data = await response.json();
       setSales(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -68,7 +71,7 @@ export default function Sales() {
 
   const fetchAvailableVehicles = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/vehicles/available`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/vehicles/available`);
       const data = await response.json();
       setVehicles(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -78,7 +81,7 @@ export default function Sales() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/customers`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/customers`);
       const data = await response.json();
       setCustomers(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -88,7 +91,7 @@ export default function Sales() {
 
   const fetchSummary = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/sales/summary/analytics`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/sales/summary/analytics`);
       const data = await response.json();
       setSummary(data);
     } catch (err) {
@@ -104,7 +107,7 @@ export default function Sales() {
     }
     
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/customers/search/${query}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/customers/search/${query}`);
       const data = await response.json();
       setCustomerSearchResults(data);
       setShowCustomerResults(true);
@@ -151,6 +154,40 @@ export default function Sales() {
   const totalAmount = selectedVehicleDetails ? selectedVehicleDetails.price * newSale.quantity_sold : 0;
   const balanceDue = totalAmount - (parseFloat(newSale.amount_paid) || 0);
 
+  // Send email receipt function
+  const sendEmailReceipt = async (saleId, customerEmail, customerName) => {
+    if (!customerEmail) {
+      console.log("No email address provided");
+      return false;
+    }
+    
+    setSendingEmail(true);
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/email/send-receipt/${saleId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: customerEmail, customerName: customerName })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setSuccess(prev => prev + ` 📧 Receipt sent to ${customerEmail}`);
+        return true;
+      } else {
+        console.error("Failed to send email:", data.error);
+        setError(`Failed to send email: ${data.error}`);
+        return false;
+      }
+    } catch (err) {
+      console.error("Error sending email:", err);
+      setError("Failed to send email receipt");
+      return false;
+    } finally {
+      setSendingEmail(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -158,7 +195,7 @@ export default function Sales() {
     setLoading(true);
     
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/sales`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/sales`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newSale)
@@ -170,14 +207,20 @@ export default function Sales() {
         throw new Error(data.error || "Sale failed");
       }
       
-      setSuccess(`Sale completed successfully! ${data.payment_status === 'Paid' ? 'Full payment received.' : `Balance due: M${data.balance_due.toLocaleString()}`}`);
+      // Send email receipt if customer has email
+      const customerEmail = newSale.email || (selectedCustomer?.email);
+      if (customerEmail && data.sale_id) {
+        await sendEmailReceipt(data.sale_id, customerEmail, `${newSale.first_name} ${newSale.last_name}`);
+      }
+      
+      setSuccess(`Sale completed successfully! ${data.payment_status === 'Paid' ? 'Full payment received.' : `Balance due: M${data.balance_due.toLocaleString()}`} ${customerEmail ? 'Receipt sent to email.' : ''}`);
       resetForm();
       fetchSales();
       fetchAvailableVehicles();
       fetchCustomers();
       fetchSummary();
       
-      setTimeout(() => setSuccess(""), 3000);
+      setTimeout(() => setSuccess(""), 5000);
     } catch (err) {
       setError(err.message);
       setTimeout(() => setError(""), 3000);
@@ -193,7 +236,7 @@ export default function Sales() {
     }
     
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/sales/${selectedSale.id}/payment`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/sales/${selectedSale.id}/payment`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount_paid: parseFloat(paymentAmount) })
@@ -216,6 +259,17 @@ export default function Sales() {
       setError(err.message);
       setTimeout(() => setError(""), 3000);
     }
+  };
+
+  const handleResendReceipt = async (sale) => {
+    const customerEmail = sale.email || sale.customer_email;
+    if (!customerEmail) {
+      setError("No email address available for this customer");
+      setTimeout(() => setError(""), 3000);
+      return;
+    }
+    
+    await sendEmailReceipt(sale.id, customerEmail, `${sale.first_name} ${sale.last_name}`);
   };
 
   const resetForm = () => {
@@ -246,239 +300,218 @@ export default function Sales() {
     const balance = sale.amount - sale.amount_paid;
     const printWindow = window.open("", "_blank");
     printWindow.document.write(`
+      <!DOCTYPE html>
       <html>
-        <head>
-          <title>Invoice - #${sale.id}</title>
-          <style>
-            body {
-              font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-              color: #333;
-              padding: 40px;
-              line-height: 1.6;
-            }
-            .invoice-header {
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              border-bottom: 3px solid #000;
-              padding-bottom: 20px;
-              margin-bottom: 30px;
-            }
-            .logo-section img {
-              height: 50px;
-              object-fit: contain;
-            }
-            .logo-section h2 {
-              margin: 5px 0 0 0;
-              font-size: 24px;
-              font-weight: 800;
-              letter-spacing: 1px;
-            }
-            .logo-section h2 span:first-child {
-              color: #000;
-            }
-            .logo-section h2 span:last-child {
-              color: #0e48f1;
-            }
-            .company-info {
-              text-align: right;
-              font-size: 14px;
-            }
-            .invoice-title-section {
-              display: flex;
-              justify-content: space-between;
-              margin-bottom: 30px;
-            }
-            .invoice-title {
-              font-size: 28px;
-              font-weight: bold;
-              text-transform: uppercase;
-              color: #111;
-            }
-            .invoice-meta {
-              font-size: 14px;
-              text-align: right;
-            }
-            .grid {
-              display: grid;
-              grid-template-columns: 1fr 1fr;
-              gap: 40px;
-              margin-bottom: 40px;
-            }
-            .section-title {
-              font-size: 16px;
-              font-weight: bold;
-              text-transform: uppercase;
-              border-bottom: 1px solid #ddd;
-              padding-bottom: 5px;
-              margin-bottom: 15px;
-              color: #555;
-            }
-            .details p {
-              margin: 4px 0;
-              font-size: 14px;
-            }
-            table {
-              width: 100%;
-              border-collapse: collapse;
-              margin-bottom: 40px;
-            }
-            th, td {
-              padding: 12px;
-              text-align: left;
-              border-bottom: 1px solid #ddd;
-            }
-            th {
-              background-color: #f8f9fa;
-              font-weight: bold;
-              text-transform: uppercase;
-              font-size: 13px;
-            }
-            .text-right {
-              text-align: right;
-            }
-            .totals-section {
-              width: 300px;
-              margin-left: auto;
-              margin-bottom: 40px;
-            }
-            .totals-row {
-              display: flex;
-              justify-content: space-between;
-              padding: 8px 0;
-              font-size: 14px;
-            }
-            .totals-row.grand-total {
-              border-top: 2px solid #000;
-              border-bottom: 2px solid #000;
-              font-weight: bold;
-              font-size: 18px;
-              padding: 12px 0;
-            }
-            .footer {
-              text-align: center;
-              font-size: 12px;
-              color: #777;
-              border-top: 1px solid #eee;
-              padding-top: 20px;
-              margin-top: 50px;
-            }
-            @media print {
-              body { padding: 20px; }
-              .no-print { display: none; }
-            }
-          </style>
-        </head>
-        <body>
-          <div class="invoice-header">
-            <div class="logo-section">
-              <img src="/autoland-logo.png" alt="AutoLand Logo" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';" />
-              <div id="logo-fallback" style="display:none; font-size: 24px; font-weight: 800;"><span style="color:#000;">AUTO</span><span style="color:#0e48f1;">LAND</span></div>
-            </div>
-            <div class="company-info">
-              <strong>AutoLand Dealership</strong><br />
-              123 Main Road, Showroom District<br />
-              Maseru, Lesotho<br />
-              Phone: +266 2231 1234<br />
-              Email: billing@autoland.co.ls
-            </div>
+      <head>
+        <title>Invoice - AutoLand Motors</title>
+        <meta charset="utf-8">
+        <style>
+          body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+          }
+          .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+          }
+          .header {
+            background: linear-gradient(135deg, #1a1e2b 0%, #0f172a 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+          }
+          .header h1 {
+            margin: 0;
+            font-size: 32px;
+            letter-spacing: 2px;
+          }
+          .header h1 span:first-child { color: #ef4444; }
+          .header h1 span:last-child { color: #3b82f6; }
+          .header p { margin: 5px 0 0; opacity: 0.8; }
+          .content { padding: 30px; }
+          .invoice-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #dc2626;
+            padding-bottom: 10px;
+          }
+          .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+          }
+          .info-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 3px solid #dc2626;
+          }
+          .info-box h3 {
+            margin: 0 0 10px;
+            font-size: 16px;
+            color: #dc2626;
+          }
+          .info-box p {
+            margin: 5px 0;
+            font-size: 14px;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+          }
+          th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+          }
+          th {
+            background: #f8f9fa;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+          }
+          .text-right { text-align: right; }
+          .totals {
+            width: 300px;
+            margin-left: auto;
+            margin-top: 20px;
+          }
+          .totals-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+          }
+          .totals-row.grand-total {
+            border-top: 2px solid #333;
+            border-bottom: 2px solid #333;
+            font-weight: bold;
+            font-size: 18px;
+            padding: 12px 0;
+          }
+          .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+          }
+          .status-paid {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: bold;
+          }
+          .status-partial { background: #f59e0b; }
+          .status-pending { background: #ef4444; }
+          @media print {
+            body { padding: 0; }
+            .no-print { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1><span>AUTO</span><span>LAND</span></h1>
+            <p>Quality Used Cars | Maseru, Lesotho</p>
           </div>
-
-          <div class="invoice-title-section">
-            <div>
-              <span class="invoice-title">Sales Invoice</span>
-            </div>
-            <div class="invoice-meta">
-              <strong>Invoice #:</strong> INV-${sale.id.toString().padStart(6, '0')}<br />
-              <strong>Date:</strong> ${new Date(sale.sale_date).toLocaleDateString()}<br />
-              <strong>Payment Method:</strong> ${sale.payment_method}<br />
-              <strong>Status:</strong> ${sale.payment_status}
-            </div>
-          </div>
-
-          <div class="grid">
-            <div class="details">
-              <div class="section-title">Bill To</div>
-              <p><strong>Customer Name:</strong> ${sale.first_name} ${sale.last_name}</p>
-              <p><strong>National ID:</strong> ${sale.id_number || 'N/A'}</p>
-              <p><strong>Phone:</strong> ${sale.phone || 'N/A'}</p>
-              <p><strong>Email:</strong> ${sale.email || 'N/A'}</p>
-              <p><strong>Address:</strong> ${sale.address || ''}, ${sale.city || ''}</p>
-            </div>
-            <div class="details">
-              <div class="section-title">Seller Info</div>
-              <p><strong>Representative:</strong> ${sale.salesperson || 'AutoLand Sales Team'}</p>
-              <p><strong>Store Location:</strong> Main Showroom</p>
-              <p><strong>Warranty:</strong> 12 Months Limited Dealer Warranty</p>
-            </div>
-          </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th>Vehicle Description</th>
-                <th>Make & Model</th>
-                <th>Registration</th>
-                <th class="text-right">Qty</th>
-                <th class="text-right">Unit Price</th>
-                <th class="text-right">Total Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>${sale.vehicle_name}</strong></td>
-                <td>${sale.make} ${sale.model}</td>
-                <td>${sale.registration_number || 'N/A'}</td>
-                <td class="text-right">${sale.quantity_sold}</td>
-                <td class="text-right">M${Number(sale.amount / sale.quantity_sold).toLocaleString()}</td>
-                <td class="text-right">M${Number(sale.amount).toLocaleString()}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="totals-section">
-            <div class="totals-row">
-              <span>Subtotal:</span>
-              <span>M${Number(sale.amount).toLocaleString()}</span>
-            </div>
-            <div class="totals-row">
-              <span>Amount Paid:</span>
-              <span style="color: green; font-weight: 500;">M${Number(sale.amount_paid).toLocaleString()}</span>
-            </div>
-            <div class="totals-row" style="border-top: 1px dashed #ddd; padding-top: 8px;">
-              <span>Balance Due:</span>
-              <span style="color: ${balance > 0 ? 'red' : 'inherit'}; font-weight: 500;">
-                M${balance > 0 ? balance.toLocaleString() : '0.00'}
+          <div class="content">
+            <div class="invoice-title">
+              SALES INVOICE
+              <span style="float:right; font-size: 14px; font-weight: normal;">
+                <span class="status-paid">${sale.payment_status}</span>
               </span>
             </div>
-            <div class="totals-row grand-total">
-              <span>Grand Total:</span>
-              <span>M${Number(sale.amount).toLocaleString()}</span>
+            
+            <div class="info-grid">
+              <div class="info-box">
+                <h3>BILL TO</h3>
+                <p><strong>${sale.first_name} ${sale.last_name}</strong></p>
+                <p>ID: ${sale.id_number || 'N/A'}</p>
+                <p>Phone: ${sale.phone || 'N/A'}</p>
+                <p>Email: ${sale.email || 'N/A'}</p>
+                <p>Address: ${sale.address || ''} ${sale.city || ''}</p>
+              </div>
+              <div class="info-box">
+                <h3>INVOICE DETAILS</h3>
+                <p><strong>Invoice #:</strong> INV-${sale.id.toString().padStart(6, '0')}</p>
+                <p><strong>Date:</strong> ${new Date(sale.sale_date).toLocaleDateString()}</p>
+                <p><strong>Payment Method:</strong> ${sale.payment_method}</p>
+                <p><strong>Salesperson:</strong> ${sale.salesperson || 'AutoLand Team'}</p>
+              </div>
+            </div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Make/Model</th>
+                  <th class="text-right">Qty</th>
+                  <th class="text-right">Unit Price</th>
+                  <th class="text-right">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>${sale.vehicle_name}</strong></td>
+                  <td>${sale.make} ${sale.model} (${sale.year})</td>
+                  <td class="text-right">${sale.quantity_sold}</td>
+                  <td class="text-right">M${Number(sale.amount / sale.quantity_sold).toLocaleString()}</td>
+                  <td class="text-right">M${Number(sale.amount).toLocaleString()}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="totals">
+              <div class="totals-row">
+                <span>Subtotal:</span>
+                <span>M${Number(sale.amount).toLocaleString()}</span>
+              </div>
+              <div class="totals-row">
+                <span>Amount Paid:</span>
+                <span style="color: #10b981;">M${Number(sale.amount_paid).toLocaleString()}</span>
+              </div>
+              ${balance > 0 ? `
+              <div class="totals-row">
+                <span>Balance Due:</span>
+                <span style="color: #ef4444;">M${balance.toLocaleString()}</span>
+              </div>
+              ` : ''}
+              <div class="totals-row grand-total">
+                <span>GRAND TOTAL:</span>
+                <span>M${Number(sale.amount).toLocaleString()}</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 30px; padding: 15px; background: #fef3c7; border-left: 3px solid #f59e0b;">
+              <p style="margin: 0; font-size: 13px;"><strong>📋 Payment Instructions:</strong> ${balance > 0 ? `Outstanding balance of M${balance.toLocaleString()} is due within 30 days.` : 'Thank you for your full payment!'}</p>
             </div>
           </div>
-
-          <div style="margin-top: 60px; display: flex; justify-content: space-between;">
-            <div style="width: 200px; border-top: 1px solid #333; text-align: center; padding-top: 5px; font-size: 13px;">
-              Customer Signature
-            </div>
-            <div style="width: 200px; border-top: 1px solid #333; text-align: center; padding-top: 5px; font-size: 13px;">
-              Authorized Signature
-            </div>
-          </div>
-
           <div class="footer">
-            Thank you for your business! AutoLand is registered in Lesotho. Terms & conditions apply.
+            <p><strong>AutoLand Motors (Pty) Ltd</strong> | Registration No: 2019/1234 | VAT: 12345678</p>
+            <p>123 Main Road, Maseru, Lesotho | Tel: +266 2231 1234 | Email: info@autoland.co.ls</p>
+            <p>Thank you for choosing AutoLand. Drive safely!</p>
           </div>
-
-          <script>
-            window.onload = function() {
-              setTimeout(function() {
-                window.print();
-                window.close();
-              }, 500);
-            };
-          </script>
-        </body>
+        </div>
+        <script>
+          window.onload = function() {
+            setTimeout(function() {
+              window.print();
+              window.close();
+            }, 500);
+          };
+        </script>
+      </body>
       </html>
     `);
     printWindow.document.close();
@@ -504,6 +537,7 @@ export default function Sales() {
           <div className="mobile-logo"><span>AUTO</span><span>LAND</span></div>
           <div style={{ width: 40 }} />
         </div>
+        
         {/* Header */}
         <div className="d-flex justify-between align-center mb-4">
           <div>
@@ -573,6 +607,7 @@ export default function Sales() {
         {/* Alert Messages */}
         {success && <div className="alert alert-success">✓ {success}</div>}
         {error && <div className="alert alert-error">✗ {error}</div>}
+        {sendingEmail && <div className="alert alert-info">📧 Sending email receipt...</div>}
 
         {/* Sales Form */}
         {showForm && (
@@ -727,10 +762,12 @@ export default function Sales() {
                         <label className="form-label">Email</label>
                         <input
                           type="email"
+                          placeholder="customer@example.com"
                           value={newSale.email}
                           onChange={(e) => setNewSale({...newSale, email: e.target.value})}
                           className="form-input"
                         />
+                        <p className="form-help">Receipt will be sent to this email</p>
                       </div>
                       <div className="form-group">
                         <label className="form-label">Alternative Phone</label>
@@ -875,7 +912,7 @@ export default function Sales() {
                   <th>Payment</th>
                   <th>Status</th>
                   <th>Date</th>
-                  <th>Action</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -914,15 +951,26 @@ export default function Sales() {
                       </td>
                       <td>{new Date(sale.sale_date).toLocaleDateString()}</td>
                       <td>
-                        <div className="action-group" style={{ display: 'flex', gap: '6px' }}>
+                        <div className="action-group" style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                           <button
                             onClick={() => handleDownloadInvoice(sale)}
                             className="btn btn-secondary btn-sm"
                             title="Print Invoice"
                             style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 8px', fontSize: '11px' }}
                           >
-                            📄 Invoice
+                            <FiPrinter size={12} /> Print
                           </button>
+                          {sale.email && (
+                            <button
+                              onClick={() => handleResendReceipt(sale)}
+                              className="btn btn-info btn-sm"
+                              title="Resend Email Receipt"
+                              style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 8px', fontSize: '11px', background: '#0e48f1', color: 'white', border: 'none' }}
+                              disabled={sendingEmail}
+                            >
+                              <FiMail size={12} /> Resend Receipt
+                            </button>
+                          )}
                           {sale.payment_status !== 'Paid' && (
                             <button
                               onClick={() => {
@@ -1021,7 +1069,7 @@ export default function Sales() {
                   onSave={(customerId) => {
                     setShowCustomerForm(false);
                     fetchCustomers();
-                    fetch(`${process.env.REACT_APP_API_URL}/api/customers/${customerId}`)
+                    fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/customers/${customerId}`)
                       .then(res => res.json())
                       .then(customer => selectCustomer(customer));
                   }}
