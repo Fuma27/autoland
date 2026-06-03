@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
-import { FiRefreshCw, FiBarChart2, FiCheckCircle, FiAlertCircle, FiInfo, FiZap, FiTrendingUp, FiTrendingDown, FiTarget, FiPieChart, FiUsers, FiTruck, FiDollarSign, FiClock } from "react-icons/fi";
+import { FiRefreshCw, FiBarChart2, FiCheckCircle, FiAlertCircle, FiInfo, FiZap, FiTrendingUp, FiTarget, FiUsers, FiClock } from "react-icons/fi";
 import '../styles/financial-dashboard.css';
 import '../styles/components.css';
 import '../styles/sidebar.css';
@@ -16,7 +16,7 @@ export default function FinancialDashboard() {
     start: new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0],
     end: new Date().toISOString().split('T')[0]
   });
-  const [comparisonPeriod, setComparisonPeriod] = useState("previous_period");
+
 
   useEffect(() => {
     fetchData();
@@ -187,9 +187,7 @@ export default function FinancialDashboard() {
   // Calculate average sale value
   const averageSaleValue = filteredSales.length > 0 ? totalRevenue / filteredSales.length : 0;
 
-  // Calculate days inventory outstanding (estimated)
-  const monthlyAvgCost = totalExpenses / 12;
-  const daysInventoryOutstanding = monthlyAvgCost > 0 ? (totalInventoryValue / monthlyAvgCost * 30).toFixed(0) : 0;
+
 
   // Max values for charts
   const maxRevenue = Math.max(...monthlyRevenue, ...monthlyExpenses, 1000);
@@ -862,7 +860,6 @@ export default function FinancialDashboard() {
                   </thead>
                   <tbody>
                     {months.map((month, i) => {
-                      const monthMargin = monthlyRevenue[i] > 0 ? (monthlyProfit[i] / monthlyRevenue[i] * 100).toFixed(1) : 0;
                       const status = monthlyProfit[i] > 0 ? (monthlyProfit[i] > 50000 ? 'Excellent' : 'Good') : 'Loss';
                       return (
                         <tr key={month}>
